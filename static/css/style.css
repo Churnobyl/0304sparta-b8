@@ -1,0 +1,78 @@
+
+/* 폰트 import */
+@import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+
+/* 전체 Gamja Flower 폰트 적용 */
+* {
+  font-family: 'Gamja Flower', cursive;
+}
+
+body {
+  font-size: 1rem;
+}
+
+p {
+  font-size:  2rem;
+}
+
+.cover {
+  width: 100%;
+  height: 100vh;
+  background-size:0vmax;
+  background: no-repeat center;
+  background-image:url('../img/bg.jpg');
+}
+
+.container {
+  width: 1080px;
+  height: 100%;
+}
+
+.title {
+  display: flex;
+  width: 100%;
+  height: 150px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 5rem;
+}
+
+.section {
+  width: 100%;
+  height: 78vh;
+  display: flex;
+  align-items: center;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.brain-cover {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  margin: 200px auto;
+}
+
+.brain {
+  width: 10rem;
+  height:10rem;
+  filter: invert(17%) sepia(1%) saturate(4290%) hue-rotate(47deg) brightness(102%) contrast(77%);
+}
+
+.brain:hover {
+  filter: invert(53%) sepia(53%) saturate(6363%) hue-rotate(334deg) brightness(104%) contrast(96%);
+}
+
+.bottom {
+  width: 100%;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
