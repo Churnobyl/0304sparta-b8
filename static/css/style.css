@@ -76,3 +76,27 @@ img {
   align-items: center;
   margin: 0 auto;
 }
+
+
+.brainst {
+  width:50rem;
+  height:50rem;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 15%;
+  
+}
+
+.brainstbg{
+  width:55rem;
+  height:40rem;
+  background-color: rgb(237, 217, 172);
+  border-radius: 5%;
+  margin : auto;
+  margin-top: 5%;
+}
+
+
+.figure-img {
+  font-size: 2rem;
+}
