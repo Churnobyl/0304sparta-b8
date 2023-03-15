@@ -36,6 +36,7 @@ p {
   justify-content: center;
   flex-direction: column;
   font-size: 5rem;
+  color : rgb(97, 96, 96);
 }
 
 .section {
@@ -60,9 +61,10 @@ img {
 }
 
 .brain {
-  width: 10rem;
-  height:10rem;
+  width: 12rem;
+  height:12rem;
   filter: invert(17%) sepia(1%) saturate(4290%) hue-rotate(47deg) brightness(102%) contrast(77%);
+  z-index: 1;
 }
 
 .brain:hover {
@@ -75,4 +77,35 @@ img {
   display: flex;
   align-items: center;
   margin: 0 auto;
+}
+
+
+.hat1 {
+  width: 14rem;
+  height: 7rem;
+  z-index: 2;
+}
+
+.hat2 {
+  width: 14rem;
+  height: 7rem;
+  z-index: 2;
+}
+
+.hat3 {
+  width: 14rem;
+  height: 7rem;
+  z-index: 2;
+}
+
+.hat4 {
+  width: 14rem;
+  height: 7rem;
+  z-index: 2;
+}
+
+.hat5 {
+  width: 14rem;
+  height: 7rem;
+  z-index: 2;
 }

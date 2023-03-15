@@ -25,17 +25,114 @@
 </head>
 
 <script>
+$.ajax({
+type: "GET",
+url: "https://api.openweathermap.org/data/2.5/weather?lat=37.566536&lon=126.977966&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric",
+data: {},
+success: function(response){
+  let weather = response['weather']['0']['main']
+  let temp = response['main']['temp']
+  
+  let temp_html = `<span>${weather}</span>`
+  let temp_html2 = `<span>${temp}</span>`
+  $('#wth').append(temp_html)
+  $('#tp').append(temp_html2)
+
+console.log(weather, temp)
+}
+})
+
+
+
+
   /* brain content hovering jquery */
   $(document).ready(function () {
     $('.brain').hover(function () {
-      $(this).addClass('floating');
+      $(this).addClass('floating1');
     },
       function () {
-        $(this).removeClass('floating');
+        $(this).removeClass('floating1');
       }
     )
   })
   /* brain content hovering jquery end */
+
+  /*hat content hovering jquery*/
+  $(document).ready(function () {
+    $('.hat1').hover(function () {
+      $(this).addClass('floating2');
+    },
+      function () {
+        $(this).removeClass('floating2');
+      }
+    )
+  })
+  /*hat content hovering jquery end*/
+
+  /*brain-hat-combine content hovering jquery*/
+  $(document).ready(function () {
+    $('.brain-hat-combine1').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat1").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat1").removeClass('floating2');      }
+    )
+  })
+
+  $(document).ready(function () {
+    $('.brain-hat-combine2').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat2").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat2").removeClass('floating2');      }
+    )
+  })
+
+  $(document).ready(function () {
+    $('.brain-hat-combine3').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat3").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat3").removeClass('floating2');      }
+    )
+  })
+
+  $(document).ready(function () {
+    $('.brain-hat-combine4').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat4").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat4").removeClass('floating2');      }
+    )
+  })
+
+  $(document).ready(function () {
+    $('.brain-hat-combine5').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat5").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat5").removeClass('floating2');      }
+    )
+  })
+  
+  /*brain-hat-combine content hovering jquery end*/
+  
+
+
+
+
+
+
 
   $(function(){
 // 	이미지 클릭시 해당 이미지 모달
@@ -76,33 +173,68 @@
 
       <!-- title html -->
       <div class="title">
-        B-8 뇌구조
+        <span>What's in our <strong style="color: black;">Brain🧠</strong> <span style="font-size: 40px;">/ B-8조</span></span>
       </div>
+      <p>당신은 어떤 생각을 하시고 계십니까? <span id="wth">/서울 날씨 : </span></p>
+      <p>우리 팀의 생각은 이렇습니다!<span id="tp"> /서울 기온 : </span></p>
       <!-- title html end -->
 
       <!-- section html -->
       <div class="section">
         <div class="brain-cover">
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+          
+          
+          
+          
+          <div class="brain-hat-combine1">
+            <div class="hat1" style="position:relative;">
+              <img src="../static/img/hat1.png">
+            </div>
+            <div class="brain" style="position: absolute; top:630px; left:355px;">
+              <img src="../static/img/brain.png" alt ="../static/img/modal.png">
             <p>성철민</p>
+            </div>
           </div>
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+
+          <div class="brain-hat-combine2">
+            <div class="hat2" style="position:relative;">
+              <img src="../static/img/hat2.png">
+            </div>
+            <div class="brain" style="position: absolute; top:630px; left:609px;">
+              <img src="../static/img/brain.png" alt ="../static/img/modal.png">
             <p>이동훈</p>
+            </div>
           </div>
-          <div class="brain">
+            
+        <div class="brain-hat-combine3">
+          <div class="hat3" style="position: relative;">
+            <img src="../static/img/hat3.png">
+          </div>
+          <div class="brain" style="position:absolute; top:630px; left:863px;">
             <img src="../static/img/brain.png" alt ="../static/img/modal.png">
             <p>이미진</p>
           </div>
-          <div class="brain">
+        </div>
+          
+        <div class="brain-hat-combine4">
+          <div class="hat4" style="position: relative">
+            <img src="../static/img/hat4.png">
+          </div>
+          <div class="brain" style="position:absolute; top:630px; left: 1115px;">
             <img src="../static/img/brain.png" alt ="../static/img/modal.png">
             <p>이예슬</p>
           </div>
-          <div class="brain">
+        </div>
+
+        <div class="brain-hat-combine5">
+          <div class="hat5" style="position:relative">
+            <img src="../static/img/hat5.png">
+          </div>
+          <div class="brain" style="position : absolute; top:630px; left:1370px">
             <img src="../static/img/brain.png" alt ="../static/img/modal.png">
             <p>조혜민</p>
           </div>
+        </div>
 
         </div>
       </div>
