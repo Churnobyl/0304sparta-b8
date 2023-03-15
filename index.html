@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="B-8조" />
+  <meta property="og:description" content="팀 소개 페이지" />
+  <meta property="og:image" content="img" />
+  <title>B-8 팀 소개 페이지</title>
+
+  <!-- css link -->
+  <link rel="stylesheet" href="../static/css/style.css?after" type="text/css">
+  <link rel="stylesheet" href="../static/css/animations.css?after" type="text/css">
+
+  <!-- 부트스트랩, jQuery -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+</head>
+
+<script>
+  /* brain content hovering jquery */
+  $(document).ready(function () {
+    $('.brain').hover(function () {
+      $(this).addClass('floating');
+    },
+      function () {
+        $(this).removeClass('floating');
+      }
+    )
+  })
+  /* brain content hovering jquery end */
+
+
+
+  // comment POST
+
+  $(document).ready(function () {
+        show_comment();
+      });
+     
+      function save_comment() {
+
+        let name = $('#name').val()
+        let comment = $('#comment').val()
+        let formData = new FormData();
+        formData.append("name_give", name);
+        formData.append("comment_give", comment);
+
+        fetch('/', {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
+         
+            alert(data["msg"]);
+            window.location.reload();
+          });
+      }
+
+      //comment GET
+
+      function show_comment() { 
+        fetch('/comment',{ method: "GET" }).then((res) => res.json()).then((data) => {
+						let rows = data['result']
+            
+
+            $('#comment-list').empty()
+
+            rows.forEach((a)=>{
+              let name = a['name']
+              let comment = a['comment']
+              let _id =a['_id']
+              // id 값을 forEach 에서 네임이랑 커멘트처럼 받아서 어펜드 붙이는 그 에디트 ,리무브 함수의 소괄호 안에 넣어주면
+
+              let temp_html = `<div class="card">
+                                  <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                      <p>${comment}</p>
+                                      <footer class="blockquote-footer">${name}</footer>
+                                    </blockquote>
+                                  </div>
+                                </div>
+                                <button onclick="edit_comment(${_id})" type="button" class="btn btn-dark">
+                                        수정
+                                      </button>
+                                      <button onclick="remove_comment(${_id})" type="button" class="btn btn-dark">
+                                        삭제
+                                      </button>`
+
+              $('#comment-list').append(temp_html)
+         })
+				})
+      }
+
+
+
+      // function edit_comment(_id){
+      //   fetch ('/comment/edit/'+_id,{method : "POST"}).then((res)=>res.json()).then((data) => {})
+
+
+      //   alert(data["msg"]);
+      //   window.location.reload();
+      // }
+
+      //edit_comment GET edit 뒤에 아이디 값이 url이 되게
+
+      // function edit_comment(_id) {
+      //   fetch('/comment/edit/'+_id,{method : "GET"}).then((res)=>res.json()).then((data)=>{
+      //     let select = data['result']
+      //         $('#textarea').empty
+      //       select.forEach((a)=>{
+      //         let name = a['name']
+      //         let comment = a['comment']
+      //         let _id =a['_id']
+
+  // id 값을 forEach 에서 네임이랑 커멘트처럼 받아서 어펜드 붙이는 그 에디트 ,리무브 함수의 소괄호 안에 넣어주면
+
+  // let before_edit_html = `<div class="mypost">
+  //                           <div class="form-floating mb-3">
+  //                             <input type="text" class="form-control" id="name" placeholder="url" />
+  //                             <label for="floatingInput">${name}</label>
+  //                           </div>
+  //                           <div class="form-floating">
+  //                             <textarea
+  //                               class="form-control"
+  //                               placeholder="Leave a comment here"
+  //                               id="comment"
+  //                               style="height: 100px"
+  //                             ></textarea>
+  //                             <label for="floatingTextarea2">${comment}</label>
+  //                           </div>
+  //                           <button onclick="save_comment(${_id})" type="button" class="btn btn-dark">
+  //                             댓글 남기기
+  //                           </button>
+                          
+  //                         </div>`
+                          
+  //                         $('#textarea').append(before_edit_html)
+       
+  //       })
+  //     })}
+
+
+      // function show_edited_comment(){
+      //   fetch('/comment/edit/'+id, {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
+         
+      //   let name = $('#name').val()
+      //   let comment = $('#comment').val()
+      //   let formData = new FormData();
+      //   formData.append("editname_give", name);
+      //   formData.append("editcomment_give", comment);
+
+      //    alert(data["msg"]);
+      //    window.location.reload();
+
+
+      //  });
+
+      // }
+
+</script>
+
+<body>
+  <div class="cover">
+    <div class="container">
+
+      <!-- title html -->
+      <div class="title">
+        B-8 뇌구조
+      </div>
+      <!-- title html end -->
+
+      <!-- section html -->
+      <div class="section">
+        <div class="brain-cover">
+          <div class="brain">
+            <img src="../static/img/brain.png">
+            <p>성철민</p>
+          </div>
+          <div class="brain">
+            <img src="../static/img/brain.png">
+            <p>이동훈</p>
+          </div>
+          <div class="brain">
+            <img src="../static/img/brain.png">
+            <p>이미진</p>
+          </div>
+          <div class="brain">
+            <img src="../static/img/brain.png">
+            <p>이예슬</p>
+          </div>
+          <div class="brain">
+            <img src="../static/img/brain.png">
+            <p>조혜민</p>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <p style="margin: 0 auto; font-size: 1.2rem;">ⓒ Brain-8</p>
+      </div>
+      
+
+
+
+      <div class="mypost" id="textarea">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" placeholder="url" />
+          <label for="floatingInput">닉네임</label>
+        </div>
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="comment"
+            style="height: 100px"
+          ></textarea>
+          <label for="floatingTextarea2">응원댓글</label>
+        </div>
+        <button onclick="save_comment()" type="button" class="btn btn-dark">
+          댓글 남기기
+        </button>
+       
+      </div>
+      <div class="mycards" id="comment-list">
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+             <button onclick="edit_comment()" type="button" class="btn btn-dark">
+          수정
+        </button>
+        <button onclick="remove_comment()" type="button" class="btn btn-dark">
+          삭제
+        </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+            <button onclick="edit_comment()" type="button" class="btn btn-dark">
+              수정
+            </button>
+            <button onclick="remove_comment()" type="button" class="btn btn-dark">
+              삭제
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+            <button onclick="edit_comment()" type="button" class="btn btn-dark">
+              수정
+            </button>
+            <button onclick="remove_comment()" type="button" class="btn btn-dark">
+              삭제
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- section html end -->
+      
+    </div>
+  
+
+
+  </div>
+</body>
+
+</html>
+
