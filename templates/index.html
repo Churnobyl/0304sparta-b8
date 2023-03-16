@@ -42,42 +42,38 @@
   // comment POST
 
   $(document).ready(function () {
-        show_comment();
-      });
-     
-      function save_comment() {
+    show_comment();
+  });
 
-        let name = $('#name').val()
-        let comment = $('#comment').val()
-        let formData = new FormData();
-        formData.append("name_give", name);
-        formData.append("comment_give", comment);
+  function save_comment() {
 
-        fetch('/', {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
-         
-            alert(data["msg"]);
-            window.location.reload();
-          });
-      };
+    let name = $('#name').val()
+    let comment = $('#comment').val()
+    let formData = new FormData();
+    formData.append("name_give", name);
+    formData.append("comment_give", comment);
 
-      //comment GET
+    fetch('/', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
 
-      function show_comment() { 
-        fetch('/comment',{ method: "GET" }).then((res) => res.json()).then((data) => {
-						let rows = JSON.parse(data['result'])
-            
-            $('#comment-list').empty()
+      alert(data["msg"]);
+      window.location.reload();
+    });
+  };
 
-            rows.forEach((a)=>{
-              let name = a['name']
-              let comment = a['comment']
-              let _id =a['_id']['$oid']
-              
-          
-              
+  //comment GET
 
-              
-              let temp_html = `<div class="card" id='${_id}'>
+  function show_comment() {
+    fetch('/comment', { method: "GET" }).then((res) => res.json()).then((data) => {
+      let rows = JSON.parse(data['result'])
+
+      $('#comment-list').empty()
+
+      rows.forEach((a) => {
+        let name = a['name']
+        let comment = a['comment']
+        let _id = a['_id']['$oid']
+
+        let temp_html = `<div class="card" id='${_id}'>
                                   <div class="card-body">
                                     <blockquote class="blockquote mb-0">
                                       <p>${comment}</p>
@@ -92,32 +88,32 @@
                                         삭제
                                       </button>`
 
-              $('#comment-list').append(temp_html)
-              
-         });
-				});
-      };
+        $('#comment-list').append(temp_html)
+
+      });
+    });
+  };
 
 
-     
-
-      function edit_comment(_id) {
-        fetch('/comment/edit/'+_id,{method : "GET"}).then((res)=>res.json()).then((data)=>{
-          let select = JSON.parse(data['result'])
-
-              
-              
-              
-            select.forEach((b)=>{
-              let name = b['name']
-              let comment = b['comment']
-              let _id = b['_id']
-
-       
-          
 
 
-  let before_edit_html = `<div class="mypost">
+  function edit_comment(_id) {
+    fetch('/comment/edit/' + _id, { method: "GET" }).then((res) => res.json()).then((data) => {
+      let select = JSON.parse(data['result'])
+
+
+
+
+      select.forEach((b) => {
+        let name = b['name']
+        let comment = b['comment']
+        let _id = b['_id']
+
+
+
+
+
+        let before_edit_html = `<div class="mypost">
                             <div class="form-floating mb-3">
                               <input type="text" class="form-control" id="aftername" placeholder="url" />
                               <label for="floatingInput">${name}</label>
@@ -137,86 +133,38 @@
                             
                           
                           </div>`
-                          $('#textarea').empty() 
-                          
-                         $('#textarea').append(before_edit_html);
+        $('#textarea').empty()
 
-                     
-       
-        });
-      })};
-
-
-    
-
-
-      function save_edited_comment(_id){
-
-        let name = $('#name').val()
-        let comment = $('#comment').val()
-        
-        
-       console.log(name,comment,_id)
-        
-        let formData = new FormData();
-        formData.append("editname_give", name);
-        formData.append("editcomment_give", comment);
-        formData.append("editid_give", _id)
-
-        fetch('/comment/edit/'+_id, {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
-         
-         alert(data["msg"]);
-         window.location.reload();
-        
-                        })
+        $('#textarea').append(before_edit_html);
 
 
 
-        
-
-         
-
-
-       };
-
-      
-
- 
+      });
+    })
+  };
 
 
 
 
-  $(function(){
-// 	이미지 클릭시 해당 이미지 모달
-	$(".brain").click(function(){
-		$(".modal").show();
-		// 해당 이미지 가져오기
-		var imgSrc = $(this).children("img").attr("alt");
-		var imgAlt = $(this).children("img").attr("alt");
-		$(".modalBox img").attr("src", imgSrc);
-		$(".modalBox img").attr("alt", imgAlt);
 
-		// 해당 이미지 텍스트 가져오기
-		var imgTit =  $(this).children("p").text();
-		$(".modalBox p").text(imgTit);
-	});
+  function save_edited_comment(_id) {
 
-	//.modal안에 button을 클릭하면 .modal닫기
-	$(".modal button").click(function(){
-		$(".modal").hide();
-	});
-
-	//.modal밖에 클릭시 닫힘
-	$(".modal").click(function (e) {
-    if (e.target.className != "modal") {
-      return false;
-    } else {
-      $(".modal").hide();
-    }
-  });
-});
+    let name = $('#name').val()
+    let comment = $('#comment').val()
 
 
+    console.log(name, comment, _id)
+
+    let formData = new FormData();
+    formData.append("editname_give", name);
+    formData.append("editcomment_give", comment);
+    formData.append("editid_give", _id)
+
+    fetch('/comment/edit/' + _id, { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+      alert(data["msg"]);
+      window.location.reload();
+    })
+  };
 
 </script>
 
@@ -412,12 +360,8 @@
           <label for="floatingInput">닉네임</label>
         </div>
         <div class="form-floating">
-          <textarea
-            class="form-control"
-            placeholder="Leave a comment here"
-            id="comment"
-            style="height: 100px"
-          ></textarea>
+          <textarea class="form-control" placeholder="Leave a comment here" id="comment"
+            style="height: 100px"></textarea>
           <label for="floatingTextarea2">응원댓글</label>
         </div>
         <button onclick="save_comment()" type="button" class="btn btn-dark">
@@ -425,8 +369,8 @@
         </button>
         <button onclick="save_edited_comment()" type="button" class="btn btn-dark">
           수정완료
-         </button>
-       
+        </button>
+
       </div>
       <div class="mycards" id="comment-list">
         <div class="card">
@@ -435,15 +379,15 @@
               <p>새로운 앨범 너무 멋져요!</p>
               <footer class="blockquote-footer">호빵맨</footer>
             </blockquote>
-             <button onclick="edit_comment()" type="button" class="btn btn-dark">
-          수정
-        </button>
-        <button onclick="remove_comment()" type="button" class="btn btn-dark">
-          삭제
-        </button>
+            <button onclick="edit_comment()" type="button" class="btn btn-dark">
+              수정
+            </button>
+            <button onclick="remove_comment()" type="button" class="btn btn-dark">
+              삭제
+            </button>
           </div>
         </div>
-        <div class="card" >
+        <div class="card">
           <div class="card-body">
             <blockquote class="blockquote mb-0">
               <p>새로운 앨범 너무 멋져요!</p>
@@ -472,7 +416,7 @@
           </div>
         </div>
       </div>
-    
+
       <!-- section html end -->
 
     </div>
@@ -578,7 +522,7 @@
       let got_giveUp = rows['giveUp'] // 포기?
       let got_strengths = rows['strengths'] // 자신의 장점
       let got_latitude = rows['Latitude']
-      let got_longitude = rows['Longitude'] 
+      let got_longitude = rows['Longitude']
 
 
       let each_data = {
@@ -614,7 +558,7 @@
           $('#tp').append(temp_html2)
           $('#point').text(point)
           $('#points').text(point)
-    
+
           console.log(weather, temp)
         }
       })
