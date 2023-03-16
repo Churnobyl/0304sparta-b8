@@ -13,7 +13,7 @@
   <!-- css link -->
   <link rel="stylesheet" href="../static/css/style.css?after" type="text/css">
   <link rel="stylesheet" href="../static/css/animations.css?after" type="text/css">
-
+  <link rel="stylesheet" href="../static/css/popup.css?after" type="text/css">
 
   <!-- 부트스트랩, jQuery -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -23,6 +23,38 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
 </head>
+
+<script>
+  $.ajax({
+    type: "GET",
+    url: "https://api.openweathermap.org/data/2.5/weather?lat=37.566536&lon=126.977966&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric",
+    data: {},
+    success: function(response){
+      let weather = response['weather']['0']['main']
+      let temp = response['main']['temp']
+      
+      let temp_html = `<span>${weather}</span>`
+      let temp_html2 = `<span>${temp}</span>`
+      $('#wth').append(temp_html)
+      $('#tp').append(temp_html2)
+    
+    console.log(weather, temp)
+    }
+    })
+
+
+  /* brain content hovering jquery */
+  $(document).ready(function () {
+    $('.brain').hover(function () {
+      $(this).addClass('floating');
+    },
+      function () {
+        $(this).removeClass('floating');
+      }
+    )
+  })
+  /* brain content hovering jquery end */
+</script>
 
 <body>
   <!-- Brain Modal -->
@@ -126,54 +158,150 @@
 
       <!-- title html -->
       <div class="title">
-        B-8 뇌구조
+        <span>What's in our <strong style="color: black;">Brain🧠</strong> <span style="font-size: 40px;">/ B-8조</span></span>
       </div>
+      <p>당신은 어떤 생각을 하시고 계십니까? <span id="wth">/서울 날씨 : </span></p>
+      <p>우리 팀의 생각은 이렇습니다!<span id="tp"> /서울 기온 : </span></p>
       <!-- title html end -->
 
 
       <!-- section html -->
       <div class="section">
         <div class="brain-cover">
-          <a href="#modal" class="brain-btn-open">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>성철민</p>
+          
+          
+          
+          
+          <div class="brain-hat-combine1">
+            <div class="hat1" style="position:relative;">
+              <img src="../static/img/hat1.png">
             </div>
-          </a>
-          <a onClick="">
-            <div class="brain brain-flower" id="dh-cover">
-              <img src="../static/img/brain.png" id="flower">
-              <p id="dh">이동훈</p>
+            <div class="brain" style="position: absolute; top:630px; left:355px;">
+              <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+            <p>성철민</p>
             </div>
-          </a>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>이미진</p>
+          </div>
+
+          <div class="brain-hat-combine2">
+            <div class="hat2" style="position:relative;">
+              <img src="../static/img/hat2.png">
             </div>
-          </a>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>이예슬</p>
+            <div class="brain" style="position: absolute; top:630px; left:609px;">
+              <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+            <p>이동훈</p>
             </div>
-          </a>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>조혜민</p>
-            </div>
-          </a>
+          </div>
+            
+        <div class="brain-hat-combine3">
+          <div class="hat3" style="position: relative;">
+            <img src="../static/img/hat3.png">
+          </div>
+          <div class="brain" style="position:absolute; top:630px; left:863px;">
+            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+            <p>이미진</p>
+          </div>
+        </div>
+          
+        <div class="brain-hat-combine4">
+          <div class="hat4" style="position: relative">
+            <img src="../static/img/hat4.png">
+          </div>
+          <div class="brain" style="position:absolute; top:630px; left: 1115px;">
+            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+            <p>이예슬</p>
+          </div>
+        </div>
+
+        <div class="brain-hat-combine5">
+          <div class="hat5" style="position:relative">
+            <img src="../static/img/hat5.png">
+          </div>
+          <div class="brain" style="position : absolute; top:630px; left:1370px">
+            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
+            <p>조혜민</p>
+          </div>
+        </div>
+
         </div>
       </div>
       <div class="bottom">
         <p style="margin: 0 auto; font-size: 1.2rem;">ⓒ Brain-8</p>
       </div>
-      <!-- section html end -->
+      
 
+
+
+      <div class="mypost" id="textarea">
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="name" placeholder="url" />
+          <label for="floatingInput">닉네임</label>
+        </div>
+        <div class="form-floating">
+          <textarea
+            class="form-control"
+            placeholder="Leave a comment here"
+            id="comment"
+            style="height: 100px"
+          ></textarea>
+          <label for="floatingTextarea2">응원댓글</label>
+        </div>
+        <button onclick="save_comment()" type="button" class="btn btn-dark">
+          댓글 남기기
+        </button>
+       
+      </div>
+      <div class="mycards" id="comment-list">
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+             <button onclick="edit_comment()" type="button" class="btn btn-dark">
+          수정
+        </button>
+        <button onclick="remove_comment()" type="button" class="btn btn-dark">
+          삭제
+        </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+            <button onclick="edit_comment()" type="button" class="btn btn-dark">
+              수정
+            </button>
+            <button onclick="remove_comment()" type="button" class="btn btn-dark">
+              삭제
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <blockquote class="blockquote mb-0">
+              <p>새로운 앨범 너무 멋져요!</p>
+              <footer class="blockquote-footer">호빵맨</footer>
+            </blockquote>
+            <button onclick="edit_comment()" type="button" class="btn btn-dark">
+              수정
+            </button>
+            <button onclick="remove_comment()" type="button" class="btn btn-dark">
+              삭제
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- section html end -->
+      
     </div>
+  
+
+
   </div>
-  <!-- container html end -->
 </body>
 
 
@@ -369,3 +497,4 @@
 </script>
 
 </html>
+
