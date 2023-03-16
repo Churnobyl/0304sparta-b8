@@ -65,7 +65,7 @@ def edit_get(comment_id):
     comment_one = db.comments.find_one({'_id':ObjectId(comment_id)})
     comment_one['_id'] = str(comment_one['_id'])
     
-    print(comment_one)
+    
     
     
     
@@ -73,32 +73,36 @@ def edit_get(comment_id):
     
 
 
-@app.route("/comment/edit/<comment_id>",methods=["POST"])
-def edit_post(comment_id):
+@app.route("/comment/edit",methods=["POST"])
+def edit_post():
     editname_receive = request.form['editname_give']
     editcomment_receive = request.form['editcomment_give']
+    editid_receive = request.form['editid_give']
 
-    
-   
     doc = {
             'name' : editname_receive,
-            'comment' : editcomment_receive
+            'comment' : editcomment_receive,
+            '_id' : editid_receive
             
         }
-    
-   
-    
-    edit_done = db.comments.update_one({'_id':ObjectId(comment_id) },{'$set':doc})
-    edit_done['_id'] = str(edit_done['_id'])
 
+    db.comments.update_one({'_id': ObjectId(doc['_id'])},{'$set':{'name': doc['name'], 'comment': doc['comment']}})
+
+    return jsonify ( {'msg':'수정완료!'} )
+
+# 댓글삭제
+
+
+@app.route("/comment/delete/<comment_id>",methods=["POST"])
+def comment_delete(comment_id):
     
-
-    return jsonify ( {'msg':'수정완료!'} , {'result':dumps[edit_done]} )
-
+    delete_done = db.comments.delete_one({'_id':ObjectId(comment_id)})
+    
+    print(delete_done)
+    return jsonify ({'msg':'삭제완료!'})
 
 
  
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
