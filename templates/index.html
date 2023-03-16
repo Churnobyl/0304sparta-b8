@@ -68,7 +68,8 @@
 
       $('#comment-list').empty()
 
-      rows.forEach((a) => {
+      /* 최신순으로 출력 */
+      rows.reverse().forEach((a) => {
         let name = a['name']
         let comment = a['comment']
         let _id = a['_id']['$oid']
