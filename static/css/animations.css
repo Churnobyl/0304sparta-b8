@@ -819,11 +819,11 @@ tossing
 	animation-name: tossing;
 	-webkit-animation-name: tossing;	
 
-	animation-duration: 2.5s;	
-	-webkit-animation-duration: 2.5s;
+	animation-duration: 1s;	
+	-webkit-animation-duration: 1s;
 
-	animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: 1;
+	-webkit-animation-iteration-count: 1;
 }
 
 @keyframes tossing {
