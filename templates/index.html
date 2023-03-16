@@ -59,24 +59,27 @@
             alert(data["msg"]);
             window.location.reload();
           });
-      }
+      };
 
       //comment GET
 
       function show_comment() { 
         fetch('/comment',{ method: "GET" }).then((res) => res.json()).then((data) => {
-						let rows = data['result']
+						let rows = JSON.parse(data['result'])
             
-
             $('#comment-list').empty()
 
             rows.forEach((a)=>{
               let name = a['name']
               let comment = a['comment']
-              let _id =a['_id']
+              let _id =a['_id']['$oid']
+              
+          
+              
+
               // id 값을 forEach 에서 네임이랑 커멘트처럼 받아서 어펜드 붙이는 그 에디트 ,리무브 함수의 소괄호 안에 넣어주면
 
-              let temp_html = `<div class="card">
+              let temp_html = `<div class="card" id='${_id}'>
                                   <div class="card-body">
                                     <blockquote class="blockquote mb-0">
                                       <p>${comment}</p>
@@ -84,20 +87,21 @@
                                     </blockquote>
                                   </div>
                                 </div>
-                                <button onclick="edit_comment(${_id})" type="button" class="btn btn-dark">
+                                <button onclick="edit_comment('${_id}')" type="button" class="btn btn-dark">
                                         수정
                                       </button>
-                                      <button onclick="remove_comment(${_id})" type="button" class="btn btn-dark">
+                                      <button onclick="remove_comment('${_id}')" type="button" class="btn btn-dark">
                                         삭제
                                       </button>`
 
               $('#comment-list').append(temp_html)
-         })
-				})
-      }
+              
+         });
+				});
+      };
 
 
-
+     
       // function edit_comment(_id){
       //   fetch ('/comment/edit/'+_id,{method : "POST"}).then((res)=>res.json()).then((data) => {})
 
@@ -108,59 +112,89 @@
 
       //edit_comment GET edit 뒤에 아이디 값이 url이 되게
 
-      // function edit_comment(_id) {
-      //   fetch('/comment/edit/'+_id,{method : "GET"}).then((res)=>res.json()).then((data)=>{
-      //     let select = data['result']
-      //         $('#textarea').empty
-      //       select.forEach((a)=>{
-      //         let name = a['name']
-      //         let comment = a['comment']
-      //         let _id =a['_id']
+      function edit_comment(_id) {
+        fetch('/comment/edit/'+_id,{method : "GET"}).then((res)=>res.json()).then((data)=>{
+          let select = JSON.parse(data['result'])
 
-  // id 값을 forEach 에서 네임이랑 커멘트처럼 받아서 어펜드 붙이는 그 에디트 ,리무브 함수의 소괄호 안에 넣어주면
+              
+              
+              
+            select.forEach((b)=>{
+              let name = b['name']
+              let comment = b['comment']
+              let _id = b['_id']
 
-  // let before_edit_html = `<div class="mypost">
-  //                           <div class="form-floating mb-3">
-  //                             <input type="text" class="form-control" id="name" placeholder="url" />
-  //                             <label for="floatingInput">${name}</label>
-  //                           </div>
-  //                           <div class="form-floating">
-  //                             <textarea
-  //                               class="form-control"
-  //                               placeholder="Leave a comment here"
-  //                               id="comment"
-  //                               style="height: 100px"
-  //                             ></textarea>
-  //                             <label for="floatingTextarea2">${comment}</label>
-  //                           </div>
-  //                           <button onclick="save_comment(${_id})" type="button" class="btn btn-dark">
-  //                             댓글 남기기
-  //                           </button>
-                          
-  //                         </div>`
-                          
-  //                         $('#textarea').append(before_edit_html)
        
-  //       })
-  //     })}
+          
 
 
-      // function show_edited_comment(){
-      //   fetch('/comment/edit/'+id, {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
+  let before_edit_html = `<div class="mypost">
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" id="aftername" placeholder="url" />
+                              <label for="floatingInput">${name}</label>
+                            </div>
+                            <div class="form-floating">
+                              <textarea
+                                class="form-control"
+                                placeholder="Leave a comment here"
+                                id="aftercomment"
+                                style="height: 100px"
+                              ></textarea>
+                              <label for="floatingTextarea2">${comment}</label>
+                            </div>
+                            <button onclick="save_comment('${_id}')" type="button" class="btn btn-dark">
+                              댓글 남기기
+                            </button>
+                            
+                          
+                          </div>`
+                          $('#textarea').empty() 
+                          
+                         $('#textarea').append(before_edit_html);
+
+                     
+       
+        });
+      })};
+
+
+    
+
+
+      function save_edited_comment(_id){
+
+        let name = $('#name').val()
+        let comment = $('#comment').val()
+        
+        
+       console.log(name,comment,_id)
+        
+        let formData = new FormData();
+        formData.append("editname_give", name);
+        formData.append("editcomment_give", comment);
+        formData.append("editid_give", _id)
+
+        fetch('/comment/edit/'+_id, {method: "POST", body: formData,}).then((res) => res.json()).then((data) => {
          
-      //   let name = $('#name').val()
-      //   let comment = $('#comment').val()
-      //   let formData = new FormData();
-      //   formData.append("editname_give", name);
-      //   formData.append("editcomment_give", comment);
-
-      //    alert(data["msg"]);
-      //    window.location.reload();
+         alert(data["msg"]);
+         window.location.reload();
+        
+                        })
 
 
-      //  });
 
-      // }
+        
+
+         
+
+
+       };
+
+      
+
+ 
+
+
 
 
   $(function(){
@@ -257,6 +291,9 @@
         <button onclick="save_comment()" type="button" class="btn btn-dark">
           댓글 남기기
         </button>
+        <button onclick="save_edited_comment()" type="button" class="btn btn-dark">
+          수정완료
+         </button>
        
       </div>
       <div class="mycards" id="comment-list">
@@ -274,7 +311,7 @@
         </button>
           </div>
         </div>
-        <div class="card">
+        <div class="card" >
           <div class="card-body">
             <blockquote class="blockquote mb-0">
               <p>새로운 앨범 너무 멋져요!</p>
