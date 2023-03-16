@@ -101,19 +101,15 @@
     fetch('/comment/edit/' + _id, { method: "GET" }).then((res) => res.json()).then((data) => {
       let select = JSON.parse(data['result'])
 
-
-
-
-      select.forEach((b) => {
-        let name = b['name']
-        let comment = b['comment']
-        let _id = b['_id']
+      let name = select[0]['name']
+      let comment = select[0]['comment']
+      let _id = select[0]['_id']
 
 
 
 
 
-        let before_edit_html = `<div class="mypost">
+      let before_edit_html = `<div class="mypost">
                             <div class="form-floating mb-3">
                               <input type="text" class="form-control" id="aftername" placeholder="url" />
                               <label for="floatingInput">${name}</label>
@@ -127,44 +123,54 @@
                               ></textarea>
                               <label for="floatingTextarea2">${comment}</label>
                             </div>
-                            <button onclick="save_comment('${_id}')" type="button" class="btn btn-dark">
+                            <button onclick="save_edited_comment('${_id}')" type="button" class="btn btn-dark">
                               댓글 남기기
                             </button>
                             
                           
                           </div>`
-        $('#textarea').empty()
 
-        $('#textarea').append(before_edit_html);
+      $('#textarea').empty()
 
+      $('#textarea').append(before_edit_html);
 
-
-      });
-    })
-  };
+      })
+    };
 
 
+// 잠깐살려둠
 
 
+    function save_edited_comment(_id) {
 
-  function save_edited_comment(_id) {
-
-    let name = $('#name').val()
-    let comment = $('#comment').val()
+      let name = $('#aftername').val()
+      let comment = $('#aftercomment').val()
 
 
-    console.log(name, comment, _id)
+      console.log(name, comment, _id)
 
-    let formData = new FormData();
-    formData.append("editname_give", name);
-    formData.append("editcomment_give", comment);
-    formData.append("editid_give", _id)
+      let formData = new FormData();
+      formData.append("editname_give", name);
+      formData.append("editcomment_give", comment);
+      formData.append("editid_give", _id)
 
-    fetch('/comment/edit/' + _id, { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
-      alert(data["msg"]);
-      window.location.reload();
-    })
-  };
+      fetch('/comment/edit', { method: "POST", body: formData, }).then((res) => res.json()).then((data) => {
+        alert(data["msg"]);
+        window.location.reload();
+
+      })
+    };
+
+
+    function remove_comment(_id) {
+
+      fetch('/comment/delete/' + _id, { method: "POST" }).then((res) => res.json()).then((data) => {
+
+        alert(data["msg"]);
+        window.location.reload();
+
+      })
+    }
 
 </script>
 
@@ -367,9 +373,7 @@
         <button onclick="save_comment()" type="button" class="btn btn-dark">
           댓글 남기기
         </button>
-        <button onclick="save_edited_comment()" type="button" class="btn btn-dark">
-          수정완료
-        </button>
+
 
       </div>
       <div class="mycards" id="comment-list">
@@ -430,236 +434,234 @@
 
 
 <script>
-  /* brain content hovering jquery */
-  $(document).ready(function () {
-    $('.brain').hover(function () {
-      $(this).addClass('floating1');
-    },
-      function () {
-        $(this).removeClass('floating1');
-      }
-    )
-  })
-  /* brain content hovering jquery end */
+    /* brain content hovering jquery */
+    $(document).ready(function () {
+      $('.brain').hover(function () {
+        $(this).addClass('floating1');
+      },
+        function () {
+          $(this).removeClass('floating1');
+        }
+      )
+    })
+    /* brain content hovering jquery end */
 
-  /*brain-hat-combine content hovering jquery*/
-  $(document).ready(function () {
-    $('.brain-hat-combine').hover(function () {
-      $(this).children("div.brain").addClass('floating1')
-      $(this).children("div.hat").addClass('floating2')
-    },
-      function () {
-        $(this).children("div.brain").removeClass('floating1')
-        $(this).children("div.hat").removeClass('floating2');
-      }
-    )
-  })
-
-  /*brain-hat-combine content hovering jquery end*/
-
-  /* brain clicking */
-  $('.brain-btn-open').each(function () {
-    var modalID = $(this).attr('href');
-    var modalBg = $('.brain-modal-bg');
-
-    var imgTit = $(this).children('div.brain').children('p').text()
-
-    $(this).on('click', function (e) {
-
-      // 모달창 내용 함수 실행
-      brainListing(imgTit)
-
-      e.preventDefault();
-      $('.brain-name-cover').children('p.brain-name').text(imgTit)
-      modalBg.fadeIn();
-
-      $(modalID).show();
-
-      $('html').css({ overflow: 'hidden' });
-    });
-
-
-    //.modal안에 button을 클릭하면 .modal닫기
-    $('.modal-button').click(function () {
-      modalBg.fadeOut();
-      $(modalID).hide();
-      $(modalID).removeAttr('style');
-      window.location.reload();
+    /*brain-hat-combine content hovering jquery*/
+    $(document).ready(function () {
+      $('.brain-hat-combine').hover(function () {
+        $(this).children("div.brain").addClass('floating1')
+        $(this).children("div.hat").addClass('floating2')
+      },
+        function () {
+          $(this).children("div.brain").removeClass('floating1')
+          $(this).children("div.hat").removeClass('floating2');
+        }
+      )
     })
 
-    $('.brain-modal-bg, .modal-close').on('click', function () {
-      modalBg.fadeOut();
-      $(modalID).hide();
-      $(modalID).removeAttr('style');
-      window.location.reload();
+    /*brain-hat-combine content hovering jquery end*/
 
-      $('html').removeAttr('style');
+    /* brain clicking */
+    $('.brain-btn-open').each(function () {
+      var modalID = $(this).attr('href');
+      var modalBg = $('.brain-modal-bg');
+
+      var imgTit = $(this).children('div.brain').children('p').text()
+
+      $(this).on('click', function (e) {
+
+        // 모달창 내용 함수 실행
+        brainListing(imgTit)
+
+        e.preventDefault();
+        $('.brain-name-cover').children('p.brain-name').text(imgTit)
+        modalBg.fadeIn();
+
+        $(modalID).show();
+
+        $('html').css({ overflow: 'hidden' });
+      });
+
+
+      //.modal안에 button을 클릭하면 .modal닫기
+      $('.modal-button').click(function () {
+        modalBg.fadeOut();
+        $(modalID).hide();
+        $(modalID).removeAttr('style');
+        window.location.reload();
+      })
+
+      $('.brain-modal-bg, .modal-close').on('click', function () {
+        modalBg.fadeOut();
+        $(modalID).hide();
+        $(modalID).removeAttr('style');
+        window.location.reload();
+
+        $('html').removeAttr('style');
+      });
     });
-  });
-  /* brain clicking end */
+    /* brain clicking end */
 
-  /* brain listing */
-  function brainListing(a) {
-    let name = a;
-    let formData = new FormData();
+    /* brain listing */
+    function brainListing(a) {
+      let name = a;
+      let formData = new FormData();
 
-    formData.append("name_give", name);
-
-
-    fetch('/brain', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
-      let rows = data['result'][0]
-      console.log(rows)
-
-      let got_mbti = rows['mbti'] // MBTI
-      let got_dream = rows['dream'] // 꿈
-      let got_bucket = rows['bucket'] // 버킷리스트
-      let got_blog_url = rows['blog_url'] // 블로그 주소
-      let got_cooperation = rows['cooperation']  // 추구하는 협업스타일
-      let got_favorite_music = rows['favorite_music']  // 음악
-      let got_start = rows['start'] // 자신의 장점
-      let got_music = rows['music']  // 음악
-      let got_artist = rows['artist']  // 음악
-      let got_giveUp = rows['giveUp'] // 포기?
-      let got_strengths = rows['strengths'] // 자신의 장점
-      let got_latitude = rows['Latitude']
-      let got_longitude = rows['Longitude']
+      formData.append("name_give", name);
 
 
-      let each_data = {
-        'mbti': got_mbti,
-        'dream': got_dream,
-        'bucket': got_bucket,
-        'url': got_blog_url,
-        'cooperation': got_cooperation,
-        'favorite_music': got_favorite_music,
-        'start': got_start,
-        'giveUp': got_giveUp,
-        'strengths': got_strengths,
-        'music': got_music,
-        'artist': got_artist,
-        'latitude': got_latitude,
-        'longitude': got_longitude
-      }
+      fetch('/brain', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
+        let rows = data['result'][0]
 
-      console.log(each_data)
+        let got_mbti = rows['mbti'] // MBTI
+        let got_dream = rows['dream'] // 꿈
+        let got_bucket = rows['bucket'] // 버킷리스트
+        let got_blog_url = rows['blog_url'] // 블로그 주소
+        let got_cooperation = rows['cooperation']  // 추구하는 협업스타일
+        let got_favorite_music = rows['favorite_music']  // 음악
+        let got_start = rows['start'] // 자신의 장점
+        let got_music = rows['music']  // 음악
+        let got_artist = rows['artist']  // 음악
+        let got_giveUp = rows['giveUp'] // 포기?
+        let got_strengths = rows['strengths'] // 자신의 장점
+        let got_latitude = rows['Latitude']
+        let got_longitude = rows['Longitude']
 
-      /* weather system ^~^ */
-      $.ajax({
-        type: "GET",
-        url: `https://api.openweathermap.org/data/2.5/weather?lat=${each_data['latitude']}&lon=${each_data['longitude']}&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric`,
-        data: {},
-        success: function (response) {
-          let weather = response['weather']['0']['main']
-          let temp = response['main']['temp']
-          let point = response['name']
-          let temp_html = `<span>${weather}</span>`
-          let temp_html2 = `<span>${temp}</span>`
-          $('#wth').append(temp_html)
-          $('#tp').append(temp_html2)
-          $('#point').text(point)
-          $('#points').text(point)
 
-          console.log(weather, temp)
+        let each_data = {
+          'mbti': got_mbti,
+          'dream': got_dream,
+          'bucket': got_bucket,
+          'url': got_blog_url,
+          'cooperation': got_cooperation,
+          'favorite_music': got_favorite_music,
+          'start': got_start,
+          'giveUp': got_giveUp,
+          'strengths': got_strengths,
+          'music': got_music,
+          'artist': got_artist,
+          'latitude': got_latitude,
+          'longitude': got_longitude
         }
-      })
 
-      /* weather system end ^~^ */
 
-      /* brain content change */
-      $('#giveup').click(function () {
-        document.getElementById('giveup').classList.remove('brain-part');
-        alert(each_data['giveUp']);
-      })
+        /* weather system ^~^ */
+        $.ajax({
+          type: "GET",
+          url: `https://api.openweathermap.org/data/2.5/weather?lat=${each_data['latitude']}&lon=${each_data['longitude']}&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric`,
+          data: {},
+          success: function (response) {
+            let weather = response['weather']['0']['main']
+            let temp = response['main']['temp']
+            let point = response['name']
+            let temp_html = `<span>${weather}</span>`
+            let temp_html2 = `<span>${temp}</span>`
+            $('#wth').append(temp_html)
+            $('#tp').append(temp_html2)
+            $('#point').text(point)
+            $('#points').text(point)
 
-      $('#mbti').click(function () {
-        document.getElementById('mbti').classList.remove('brain-part');
-        $('#mbti-p').text(each_data['mbti']);
-      })
+            console.log(weather, temp)
+          }
+        })
 
-      $('#dream').click(function () {
-        document.getElementById('dream').classList.remove('brain-part');
-        $('#dream-p').text(each_data['dream']);
-        $('#dream-p').css('font-size', '1.2rem');
-      })
+        /* weather system end ^~^ */
 
-      $('#strengths').click(function () {
-        document.getElementById('strengths').classList.remove('brain-part');
-        $('#strengths-p').text(each_data['strengths']);
-        $('#strengths-p').css('font-size', '1.5rem');
-      })
+        /* brain content change */
+        $('#giveup').click(function () {
+          document.getElementById('giveup').classList.remove('brain-part');
+          alert(each_data['giveUp']);
+        })
 
-      $('#bucket').click(function () {
-        document.getElementById('bucket').classList.remove('brain-part');
-        $('#bucket-p').text(each_data['bucket']);
-        $('#bucket-p').css('font-size', '1.8rem');
-      })
+        $('#mbti').click(function () {
+          document.getElementById('mbti').classList.remove('brain-part');
+          $('#mbti-p').text(each_data['mbti']);
+        })
 
-      $('#cooperation').click(function () {
-        document.getElementById('cooperation').classList.remove('brain-part');
-        $('#cooperation-p').text(each_data['cooperation']);
-        $('#cooperation-p').css('font-size', '1.8rem');
-      })
+        $('#dream').click(function () {
+          document.getElementById('dream').classList.remove('brain-part');
+          $('#dream-p').text(each_data['dream']);
+          $('#dream-p').css('font-size', '1.2rem');
+        })
 
-      $('#music').click(function () {
-        document.getElementById('music').classList.remove('brain-part');
-        $('#yttransparent').empty();
-        $('#yttransparent').append(`
+        $('#strengths').click(function () {
+          document.getElementById('strengths').classList.remove('brain-part');
+          $('#strengths-p').text(each_data['strengths']);
+          $('#strengths-p').css('font-size', '1.5rem');
+        })
+
+        $('#bucket').click(function () {
+          document.getElementById('bucket').classList.remove('brain-part');
+          $('#bucket-p').text(each_data['bucket']);
+          $('#bucket-p').css('font-size', '1.8rem');
+        })
+
+        $('#cooperation').click(function () {
+          document.getElementById('cooperation').classList.remove('brain-part');
+          $('#cooperation-p').text(each_data['cooperation']);
+          $('#cooperation-p').css('font-size', '1.8rem');
+        })
+
+        $('#music').click(function () {
+          document.getElementById('music').classList.remove('brain-part');
+          $('#yttransparent').empty();
+          $('#yttransparent').append(`
         <iframe id='ytVideo' width='375' height='200'
           src="https://www.youtube.com/embed/${each_data['favorite_music']}?autoplay=1&start=${each_data['start']}&mute=0&autohide='2'&modestbranding=1&enablejsapi=1&version=3&playerapiid=ytplayer"
           frameBorder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
           allowFullScreen></iframe>`)
 
-        $('#songTitle').text(each_data['music'])
-        $('#songArtist').text(each_data['artist'])
+          $('#songTitle').text(each_data['music'])
+          $('#songArtist').text(each_data['artist'])
+        })
+
+        /* 유튜브 뮤직 버튼 */
+        $(".stop").on("click", function () {
+          document.getElementById('stop').classList.add('tossing');
+          $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+          console.log($("iframe")[0])
+        });
+        $(".pause").on("click", function () {
+          document.getElementById('pause').classList.add('tossing');
+          $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+          console.log($("iframe")[0])
+        });
+        $(".play").on("click", function () {
+          document.getElementById('play').classList.add('tossing');
+          $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
+          console.log($("iframe")[0])
+        });
+
+        /* brain content change end */
+
+        /* blog url copy */
+        function copyToClipboard(val) {
+          const t = document.createElement("textarea");
+          document.body.appendChild(t);
+          t.value = val;
+          t.select();
+          document.execCommand('copy');
+          document.body.removeChild(t);
+        }
+        function copy() {
+          document.getElementById('blog').classList.remove('brain-part');
+          copyToClipboard(each_data['url']);
+          alert("블로그 주소 복사 완료!")
+        }
+
+        $('#blog').click(function () {
+          copy();
+        })
+        /* blog url copy end */
       })
+    }
+    /* brain listing end */
 
-      /* 유튜브 뮤직 버튼 */
-      $(".stop").on("click", function () {
-        document.getElementById('stop').classList.add('tossing');
-        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
-        console.log($("iframe")[0])
-      });
-      $(".pause").on("click", function () {
-        document.getElementById('pause').classList.add('tossing');
-        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
-        console.log($("iframe")[0])
-      });
-      $(".play").on("click", function () {
-        document.getElementById('play').classList.add('tossing');
-        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
-        console.log($("iframe")[0])
-      });
-
-      /* brain content change end */
-
-      /* blog url copy */
-      function copyToClipboard(val) {
-        const t = document.createElement("textarea");
-        document.body.appendChild(t);
-        t.value = val;
-        t.select();
-        document.execCommand('copy');
-        document.body.removeChild(t);
-      }
-      function copy() {
-        document.getElementById('blog').classList.remove('brain-part');
-        copyToClipboard(each_data['url']);
-        alert("블로그 주소 복사 완료!")
-      }
-
-      $('#blog').click(function () {
-        copy();
-      })
-      /* blog url copy end */
-    })
-  }
-  /* brain listing end */
-
-  function flowers() {
-    document.getElementById('dh-cover').classList.add('brain-flower');
-    document.getElementById("flower").src = "../static/img/road-with-flower.gif";
-    document.getElementById("dh").text = "";
-  }
+    function flowers() {
+      document.getElementById('dh-cover').classList.add('brain-flower');
+      document.getElementById("flower").src = "../static/img/road-with-flower.gif";
+      document.getElementById("dh").text = "";
+    }
 </script>
 
 </html>
