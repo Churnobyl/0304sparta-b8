@@ -13,7 +13,6 @@
   <!-- css link -->
   <link rel="stylesheet" href="../static/css/style.css?after" type="text/css">
   <link rel="stylesheet" href="../static/css/animations.css?after" type="text/css">
-  <link rel="stylesheet" href="../static/css/popup.css?after" type="text/css">
 
   <!-- 부트스트랩, jQuery -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -25,6 +24,24 @@
 </head>
 
 <script>
+  $.ajax({
+    type: "GET",
+    url: "https://api.openweathermap.org/data/2.5/weather?lat=37.566536&lon=126.977966&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric",
+    data: {},
+    success: function(response){
+      let weather = response['weather']['0']['main']
+      let temp = response['main']['temp']
+      
+      let temp_html = `<span>${weather}</span>`
+      let temp_html2 = `<span>${temp}</span>`
+      $('#wth').append(temp_html)
+      $('#tp').append(temp_html2)
+    
+    console.log(weather, temp)
+    }
+    })
+
+
   /* brain content hovering jquery */
   $(document).ready(function () {
     $('.brain').hover(function () {
@@ -77,8 +94,7 @@
           
               
 
-              // id 값을 forEach 에서 네임이랑 커멘트처럼 받아서 어펜드 붙이는 그 에디트 ,리무브 함수의 소괄호 안에 넣어주면
-
+              
               let temp_html = `<div class="card" id='${_id}'>
                                   <div class="card-body">
                                     <blockquote class="blockquote mb-0">
@@ -102,15 +118,6 @@
 
 
      
-      // function edit_comment(_id){
-      //   fetch ('/comment/edit/'+_id,{method : "POST"}).then((res)=>res.json()).then((data) => {})
-
-
-      //   alert(data["msg"]);
-      //   window.location.reload();
-      // }
-
-      //edit_comment GET edit 뒤에 아이디 값이 url이 되게
 
       function edit_comment(_id) {
         fetch('/comment/edit/'+_id,{method : "GET"}).then((res)=>res.json()).then((data)=>{
@@ -232,45 +239,183 @@
 </script>
 
 <body>
+  <!-- Brain Modal -->
+  <div id="brain">
+    <div class="brain-modal-bg"></div>
+    <div class="brain-modal-wrap" id="modal">
+      <button class="modal-button">&times;</button>
+      <div class="brain-content">
+        <img src="../static/img/brain.png">
+        <div>
+          <div class="brain-part1 brain-part" id="giveup">
+            <img src="../static/img/part1.png">
+            <p>포기?</p>
+          </div>
+
+          <div class="brain-part2 brain-part" id="bucket">
+            <div class="brain-img">
+              <img src="../static/img/part2.png">
+            </div>
+            <p class="brain-text" id="bucket-p">버킷리스트</p>
+          </div>
+
+          <div class="brain-part3 brain-part" id="dream">
+            <div class="brain-img">
+              <img src="../static/img/part3.png">
+            </div>
+            <p class="brain-text" style="left:56%; top: 45%" id="dream-p">꿈</p>
+          </div>
+          <div class="brain-part4 brain-part" id="cooperation">
+            <div class="brain-img">
+              <img src="../static/img/part4.png">
+            </div>
+            <p class="brain-text" style="font-size: 2.8rem; line-height:2.9rem;" id="cooperation-p">추구하는 협업스타일</p>
+          </div>
+          <div class="brain-part5 brain-part" id="music" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="brain-img">
+              <img src="../static/img/part5.png">
+            </div>
+            <p class="brain-text" style="left:56%; top: 56%" id="music-p">음악</p>
+          </div>
+          <div class="brain-part6 brain-part" id="strengths">
+            <div class="brain-img">
+              <img src="../static/img/part6.png">
+            </div>
+            <p class="brain-text" style="top: 55%" id="strengths-p">자신의 장점</p>
+          </div>
+          <div class="brain-part7 brain-part" id="mbti">
+            <div class="brain-img">
+              <img src="../static/img/part7.png">
+            </div>
+            <p class="brain-text" id="mbti-p">MBTI</p>
+          </div>
+          <div class="brain-part8 brain-part" id="blog">
+            <div class="brain-img">
+              <img src="../static/img/part8.png">
+            </div>
+            <p class="brain-text" style="left:46%; top: 63%">블로그</p>
+          </div>
+        </div>
+      </div>
+      <div class="brain-name-cover">
+        <p class="brain-name"></p>
+      </div>
+      
+    </div>
+  </div>
+  <!-- Brain Modal end -->
+
+  <!-- youtube Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div id="yttransparent" style="display: none;">
+      </div>
+    </div>
+    <div class="ytPlay-text-cover">
+      <div>
+        <p>
+          제목:
+        <h1 id="songTitle"></h1>
+        </p>
+      </div>
+      <div>
+        <p>
+          아티스트:
+        <h2 id="songArtist"></h2>
+        </p>
+      </div>
+    </div>
+    <div id="ytPlayButton" class="ytPlay-cover">
+      <img src="../static/img/ytplay.png" class="ytbutton bounce play" id="play">
+      <img src="../static/img/ytpause.png" class="ytbutton bounce pause" id="pause">
+      <img src="../static/img/ytstop.png" class="ytbutton bounce stop" id="stop">
+    </div>
+
+  </div>
+  <!-- youtube Modal end-->
+
+  <!-- container html -->
   <div class="cover">
     <div class="container">
 
       <!-- title html -->
       <div class="title">
-        B-8 뇌구조
+        <span>What's in our <strong style="color: black;">Brain🧠</strong> <span style="font-size: 40px;">/ B-8조</span></span>
+        <p>당신은 어떤 생각을 하시고 계십니까? <span id="wth">/서울 날씨 : </span></p>
+        <p>우리 팀의 생각은 이렇습니다!<span id="tp"> /서울 기온 : </span></p>
       </div>
       <!-- title html end -->
+
 
       <!-- section html -->
       <div class="section">
         <div class="brain-cover">
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
-            <p>성철민</p>
+
+          <div class="brain-hat-combine">
+            <div class="hat">
+              <img src="../static/img/hat1.png">
+            </div>
+            <a href="#modal" class="brain-btn-open">
+              <div class="brain">
+                <img src="../static/img/brain.png">
+                <p>성철민</p>
+              </div>
+            </a>
           </div>
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
-            <p>이동훈</p>
+
+          <div class="brain-hat-combine">
+            <div class="hat">
+              <img src="../static/img/hat2.png">
+            </div>
+            <a onClick="">
+              <div class="brain brain-flower" id="dh-cover">
+                <img src="../static/img/brain.png" id="flower">
+                <p id="dh">이동훈</p>
+              </div>
+            </a>
           </div>
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
-            <p>이미진</p>
+            
+        <div class="brain-hat-combine">
+          <div class="hat">
+            <img src="../static/img/hat3.png">
           </div>
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
-            <p>이예슬</p>
+          <a href="#modal" class="brain-btn-open" onClick="">
+            <div class="brain">
+              <img src="../static/img/brain.png">
+              <p>이미진</p>
+            </div>
+          </a>
+        </div>
+          
+        <div class="brain-hat-combine">
+          <div class="hat">
+            <img src="../static/img/hat4.png">
           </div>
-          <div class="brain">
-            <img src="../static/img/brain.png" alt ="../static/img/modal.png">
-            <p>조혜민</p>
+          <a href="#modal" class="brain-btn-open" onClick="">
+            <div class="brain">
+              <img src="../static/img/brain.png">
+              <p>이예슬</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="brain-hat-combine">
+          <div class="hat">
+            <img src="../static/img/hat5.png">
           </div>
+          <a href="#modal" class="brain-btn-open" onClick="">
+            <div class="brain">
+              <img src="../static/img/brain.png">
+              <p>조혜민</p>
+            </div>
+          </a>
+        </div>
 
         </div>
       </div>
       <div class="bottom">
         <p style="margin: 0 auto; font-size: 1.2rem;">ⓒ Brain-8</p>
       </div>
-      
 
 
 
@@ -340,27 +485,221 @@
           </div>
         </div>
       </div>
-      
+    
       <!-- section html end -->
-
-
+      
     </div>
   
 
 
   </div>
-
-
-  	<!-- 팝업 될 곳 -->
-	<div class="modal">
-		<button>&times;</button>
-		<div class="modalBox">
-			<img src="" alt="">
-			<p></p>
-		</div>
-	</div>
-
 </body>
+
+
+
+
+<script>
+  /* brain content hovering jquery */
+  $(document).ready(function () {
+    $('.brain').hover(function () {
+      $(this).addClass('floating1');
+    },
+      function () {
+        $(this).removeClass('floating1');
+      }
+    )
+  })
+  /* brain content hovering jquery end */
+
+  /*brain-hat-combine content hovering jquery*/
+  $(document).ready(function () {
+    $('.brain-hat-combine').hover(function () {
+      $(this).children("div.brain").addClass('floating1')
+      $(this).children("div.hat").addClass('floating2')
+    },
+      function () {
+        $(this).children("div.brain").removeClass('floating1')
+        $(this).children("div.hat").removeClass('floating2');      }
+    )
+  })
+
+  /*brain-hat-combine content hovering jquery end*/
+
+  /* brain clicking */
+  $('.brain-btn-open').each(function () {
+    var modalID = $(this).attr('href');
+    var modalBg = $('.brain-modal-bg');
+
+    var imgTit = $(this).children('div.brain').children('p').text()
+
+    $(this).on('click', function (e) {
+
+      // 모달창 내용 함수 실행
+      brainListing(imgTit)
+
+      e.preventDefault();
+      $('.brain-name-cover').children('p.brain-name').text(imgTit)
+      modalBg.fadeIn();
+
+      $(modalID).show();
+
+      $('html').css({ overflow: 'hidden' });
+    });
+
+
+    //.modal안에 button을 클릭하면 .modal닫기
+    $('.modal-button').click(function () {
+      modalBg.fadeOut();
+      $(modalID).hide();
+      $(modalID).removeAttr('style');
+      window.location.reload();
+    })
+
+    $('.brain-modal-bg, .modal-close').on('click', function () {
+      modalBg.fadeOut();
+      $(modalID).hide();
+      $(modalID).removeAttr('style');
+      window.location.reload();
+
+      $('html').removeAttr('style');
+    });
+  });
+  /* brain clicking end */
+
+  /* brain listing */
+  function brainListing(a) {
+    let name = a;
+    let formData = new FormData();
+
+    formData.append("name_give", name);
+
+
+    fetch('/brain', { method: "POST", body: formData }).then((res) => res.json()).then((data) => {
+      let rows = data['result'][0]
+      console.log(rows)
+
+      let got_mbti = rows['mbti'] // MBTI
+      let got_dream = rows['dream'] // 꿈
+      let got_bucket = rows['bucket'] // 버킷리스트
+      let got_blog_url = rows['blog_url'] // 블로그 주소
+      let got_cooperation = rows['cooperation']  // 추구하는 협업스타일
+      let got_favorite_music = rows['favorite_music']  // 음악
+      let got_start = rows['start'] // 자신의 장점
+      let got_music = rows['music']  // 음악
+      let got_artist = rows['artist']  // 음악
+      let got_giveUp = rows['giveUp'] // 포기?
+      let got_strengths = rows['strengths'] // 자신의 장점
+
+      let each_data = {
+        'mbti': got_mbti,
+        'dream': got_dream,
+        'bucket': got_bucket,
+        'url': got_blog_url,
+        'cooperation': got_cooperation,
+        'favorite_music': got_favorite_music,
+        'start': got_start,
+        'giveUp': got_giveUp,
+        'strengths': got_strengths,
+        'music': got_music,
+        'artist': got_artist
+      }
+
+      /* brain content change */
+      $('#giveup').click(function () {
+        document.getElementById('giveup').classList.remove('brain-part');
+        alert(each_data['giveUp']);
+      })
+
+      $('#mbti').click(function () {
+        document.getElementById('mbti').classList.remove('brain-part');
+        $('#mbti-p').text(each_data['mbti']);
+      })
+
+      $('#dream').click(function () {
+        document.getElementById('dream').classList.remove('brain-part');
+        $('#dream-p').text(each_data['dream']);
+        $('#dream-p').css('font-size', '1.2rem');
+      })
+
+      $('#strengths').click(function () {
+        document.getElementById('strengths').classList.remove('brain-part');
+        $('#strengths-p').text(each_data['strengths']);
+        $('#strengths-p').css('font-size', '1.5rem');
+      })
+
+      $('#bucket').click(function () {
+        document.getElementById('bucket').classList.remove('brain-part');
+        $('#bucket-p').text(each_data['bucket']);
+        $('#bucket-p').css('font-size', '1.8rem');
+      })
+
+      $('#cooperation').click(function () {
+        document.getElementById('cooperation').classList.remove('brain-part');
+        $('#cooperation-p').text(each_data['cooperation']);
+        $('#cooperation-p').css('font-size', '1.8rem');
+      })
+
+      $('#music').click(function () {
+        document.getElementById('music').classList.remove('brain-part');
+        $('#yttransparent').empty();
+        $('#yttransparent').append(`
+        <iframe id='ytVideo' width='375' height='200'
+          src="https://www.youtube.com/embed/${each_data['favorite_music']}?autoplay=1&start=${each_data['start']}&mute=0&autohide='2'&modestbranding=1&enablejsapi=1&version=3&playerapiid=ytplayer"
+          frameBorder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+          allowFullScreen></iframe>`)
+        
+        $('#songTitle').text(each_data['music'])
+        $('#songArtist').text(each_data['artist'])
+      })
+
+      /* 유튜브 뮤직 버튼 */
+      $(".stop").on("click", function () {
+        document.getElementById('stop').classList.add('tossing');
+        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'stopVideo' + '","args":""}', '*');
+        console.log($("iframe")[0])
+      });
+      $(".pause").on("click", function () {
+        document.getElementById('pause').classList.add('tossing');
+        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+        console.log($("iframe")[0])
+      });
+      $(".play").on("click", function () {
+        document.getElementById('play').classList.add('tossing');
+        $("iframe")[0].contentWindow.postMessage('{"event":"command","func":"' + 'playVideo' + '","args":""}', '*');
+        console.log($("iframe")[0])
+      });
+
+      /* brain content change end */
+
+      /* blog url copy */
+      function copyToClipboard(val) {
+        const t = document.createElement("textarea");
+        document.body.appendChild(t);
+        t.value = val;
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+      }
+      function copy() {
+        document.getElementById('blog').classList.remove('brain-part');
+        copyToClipboard(each_data['url']);
+        alert("블로그 주소 복사 완료!")
+      }
+
+      $('#blog').click(function () {
+        copy();
+      })
+      /* blog url copy end */
+    })
+  }
+    /* brain listing end */
+
+  function flowers() {
+    document.getElementById('dh-cover').classList.add('brain-flower');
+    document.getElementById("flower").src = "../static/img/road-with-flower.gif";
+    document.getElementById("dh").text = "";
+  }
+</script>
 
 </html>
 

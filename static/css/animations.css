@@ -773,9 +773,9 @@ floating
 ==============================================
 */
 
-.floating{
-	animation-name: floating;
-	-webkit-animation-name: floating;
+.floating1{
+	animation-name: floating1;
+	-webkit-animation-name: floating1;
 
 	animation-duration: 3s;	
 	-webkit-animation-duration: 3s;
@@ -785,7 +785,7 @@ floating
 	animation-timing-function: ease-in-out;
 }
 
-@keyframes floating {
+@keyframes floating1 {
 	0% {
 		transform: translateY(0%);	
 	}
@@ -797,7 +797,7 @@ floating
 	}			
 }
 
-@-webkit-keyframes floating {
+@-webkit-keyframes floating1 {
 	0% {
 		transform: translateY(0%);	
 	}
@@ -809,6 +809,48 @@ floating
 	}				
 }
 
+
+.floating2{
+	animation-name: floating2;
+	-webkit-animation-name: floating2;
+
+	animation-duration: 3s;	
+	-webkit-animation-duration: 3s;
+
+	animation-iteration-count: infinite;
+	-webkit-animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes floating2 {
+	0% {
+		transform: translateY(0%);	
+	}
+	50% {
+		transform: translateY(3%);	
+	}	
+	100% {
+		transform: translateY(0%);
+	}			
+}
+
+@-webkit-keyframes floating2 {
+	0% {
+		transform: translateY(0%);	
+	}
+	50% {
+		transform: translateY(3%);	
+	}	
+	100% {
+		transform: translateY(0%);
+	}				
+}
+
+
+
+
+
+
 /*
 ==============================================
 tossing
@@ -819,11 +861,11 @@ tossing
 	animation-name: tossing;
 	-webkit-animation-name: tossing;	
 
-	animation-duration: 2.5s;	
-	-webkit-animation-duration: 2.5s;
+	animation-duration: 1s;	
+	-webkit-animation-duration: 1s;
 
-	animation-iteration-count: infinite;
-	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: 1;
+	-webkit-animation-iteration-count: 1;
 }
 
 @keyframes tossing {
