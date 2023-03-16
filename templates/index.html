@@ -24,24 +24,6 @@
 </head>
 
 <script>
-  $.ajax({
-    type: "GET",
-    url: "https://api.openweathermap.org/data/2.5/weather?lat=37.566536&lon=126.977966&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric",
-    data: {},
-    success: function(response){
-      let weather = response['weather']['0']['main']
-      let temp = response['main']['temp']
-      
-      let temp_html = `<span>${weather}</span>`
-      let temp_html2 = `<span>${temp}</span>`
-      $('#wth').append(temp_html)
-      $('#tp').append(temp_html2)
-    
-    console.log(weather, temp)
-    }
-    })
-
-
   /* brain content hovering jquery */
   $(document).ready(function () {
     $('.brain').hover(function () {
@@ -60,6 +42,10 @@
   <div id="brain">
     <div class="brain-modal-bg"></div>
     <div class="brain-modal-wrap" id="modal">
+      <span id="point"></span><span id="wth"> 날씨 : </span>
+      <br>
+      <span id="points"></span><span id="tp"> 기온 : </span>
+
       <button class="modal-button">&times;</button>
       <div class="brain-content">
         <img src="../static/img/brain.png">
@@ -117,7 +103,7 @@
       <div class="brain-name-cover">
         <p class="brain-name"></p>
       </div>
-      
+
     </div>
   </div>
   <!-- Brain Modal end -->
@@ -157,9 +143,10 @@
 
       <!-- title html -->
       <div class="title">
-        <span>What's in our <strong style="color: black;">Brain🧠</strong> <span style="font-size: 40px;">/ B-8조</span></span>
-        <p>당신은 어떤 생각을 하시고 계십니까? <span id="wth">/서울 날씨 : </span></p>
-        <p>우리 팀의 생각은 이렇습니다!<span id="tp"> /서울 기온 : </span></p>
+        <span>What's in our <strong style="color: black;">Brain🧠</strong> <span style="font-size: 40px;">/
+            B-8조</span></span>
+        <p>당신은 어떤 생각을 하시고 계십니까? </p>
+        <p>우리 팀의 생각은 이렇습니다!</p>
       </div>
       <!-- title html end -->
 
@@ -191,42 +178,42 @@
               </div>
             </a>
           </div>
-            
-        <div class="brain-hat-combine">
-          <div class="hat">
-            <img src="../static/img/hat3.png">
-          </div>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>이미진</p>
-            </div>
-          </a>
-        </div>
-          
-        <div class="brain-hat-combine">
-          <div class="hat">
-            <img src="../static/img/hat4.png">
-          </div>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>이예슬</p>
-            </div>
-          </a>
-        </div>
 
-        <div class="brain-hat-combine">
-          <div class="hat">
-            <img src="../static/img/hat5.png">
-          </div>
-          <a href="#modal" class="brain-btn-open" onClick="">
-            <div class="brain">
-              <img src="../static/img/brain.png">
-              <p>조혜민</p>
+          <div class="brain-hat-combine">
+            <div class="hat">
+              <img src="../static/img/hat3.png">
             </div>
-          </a>
-        </div>
+            <a href="#modal" class="brain-btn-open" onClick="">
+              <div class="brain">
+                <img src="../static/img/brain.png">
+                <p>이미진</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="brain-hat-combine">
+            <div class="hat">
+              <img src="../static/img/hat4.png">
+            </div>
+            <a href="#modal" class="brain-btn-open" onClick="">
+              <div class="brain">
+                <img src="../static/img/brain.png">
+                <p>이예슬</p>
+              </div>
+            </a>
+          </div>
+
+          <div class="brain-hat-combine">
+            <div class="hat">
+              <img src="../static/img/hat5.png">
+            </div>
+            <a href="#modal" class="brain-btn-open" onClick="">
+              <div class="brain">
+                <img src="../static/img/brain.png">
+                <p>조혜민</p>
+              </div>
+            </a>
+          </div>
 
         </div>
       </div>
@@ -234,11 +221,11 @@
         <p style="margin: 0 auto; font-size: 1.2rem;">ⓒ Brain-8</p>
       </div>
 
-      
+
       <!-- section html end -->
-      
+
     </div>
-  
+
 
 
   </div>
@@ -268,7 +255,8 @@
     },
       function () {
         $(this).children("div.brain").removeClass('floating1')
-        $(this).children("div.hat").removeClass('floating2');      }
+        $(this).children("div.hat").removeClass('floating2');
+      }
     )
   })
 
@@ -338,6 +326,9 @@
       let got_artist = rows['artist']  // 음악
       let got_giveUp = rows['giveUp'] // 포기?
       let got_strengths = rows['strengths'] // 자신의 장점
+      let got_latitude = rows['Latitude']
+      let got_longitude = rows['Longitude'] 
+
 
       let each_data = {
         'mbti': got_mbti,
@@ -350,8 +341,34 @@
         'giveUp': got_giveUp,
         'strengths': got_strengths,
         'music': got_music,
-        'artist': got_artist
+        'artist': got_artist,
+        'latitude': got_latitude,
+        'longitude': got_longitude
       }
+
+      console.log(each_data)
+
+      /* weather system ^~^ */
+      $.ajax({
+        type: "GET",
+        url: `https://api.openweathermap.org/data/2.5/weather?lat=${each_data['latitude']}&lon=${each_data['longitude']}&appid=20a67cfc9756c2dff3287c8549a2c229&units=metric`,
+        data: {},
+        success: function (response) {
+          let weather = response['weather']['0']['main']
+          let temp = response['main']['temp']
+          let point = response['name']
+          let temp_html = `<span>${weather}</span>`
+          let temp_html2 = `<span>${temp}</span>`
+          $('#wth').append(temp_html)
+          $('#tp').append(temp_html2)
+          $('#point').text(point)
+          $('#points').text(point)
+    
+          console.log(weather, temp)
+        }
+      })
+
+      /* weather system end ^~^ */
 
       /* brain content change */
       $('#giveup').click(function () {
@@ -396,7 +413,7 @@
           src="https://www.youtube.com/embed/${each_data['favorite_music']}?autoplay=1&start=${each_data['start']}&mute=0&autohide='2'&modestbranding=1&enablejsapi=1&version=3&playerapiid=ytplayer"
           frameBorder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
           allowFullScreen></iframe>`)
-        
+
         $('#songTitle').text(each_data['music'])
         $('#songArtist').text(each_data['artist'])
       })
@@ -441,7 +458,7 @@
       /* blog url copy end */
     })
   }
-    /* brain listing end */
+  /* brain listing end */
 
   function flowers() {
     document.getElementById('dh-cover').classList.add('brain-flower');
@@ -451,4 +468,3 @@
 </script>
 
 </html>
-
